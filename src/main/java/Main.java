@@ -10,7 +10,9 @@ import com.vk.api.sdk.objects.wall.WallpostFull;
 import data.Coordinate;
 import logic.ApiService;
 import logic.FileRepository;
+import logic.LocationService;
 
+import java.lang.Object;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,12 +23,15 @@ import java.util.List;
 
 public class Main {
 
+
     public static final Integer EXAMPLE_ID = 4610337;
 
     public static void main(String[] args) throws ClientException, ApiException, InterruptedException {
         ApiService apiService = new ApiService();
         FileRepository fileRepository = new FileRepository();
+        LocationService locationService = new LocationService();
 
+        System.out.println(locationService.getLocationByCoordinates(50.864906, 39.068485));
         //извлечение текста из записей пользователя
         List<WallpostFull> posts = apiService.getNotesByUserID(EXAMPLE_ID);
         fileRepository.postsToFile(posts,"posts.txt");
@@ -37,6 +42,12 @@ public class Main {
         List<Photo> photosFromUserWithCoord = apiService.getPhotosByUserID(id);
         fileRepository.coordinatesToFile(apiService.getCoordinatesFromPhotos(photosFromUserWithCoord), "coordinates.txt");
 
+        //вывод названия места по координатам
+        List<Coordinate> coordinates = apiService.getCoordinatesFromPhotos(photosFromUserWithCoord);
+        for (Coordinate coordinate: coordinates
+             ) {
+            System.out.println(locationService.getLocationByCoordinates(Double.parseDouble(coordinate.getLat().toString()),Double.parseDouble(coordinate.getLng().toString())));
+        }
 
         List<Fields> fields = new ArrayList<>();
         fields.add(Fields.COUNTRY);
