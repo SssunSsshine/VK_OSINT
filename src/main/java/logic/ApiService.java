@@ -2,30 +2,27 @@ package logic;
 
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
+import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiAccessAlbumException;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import com.vk.api.sdk.objects.groups.Address;
+import com.vk.api.sdk.objects.friends.responses.GetMutualTargetUidsResponse;
 import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse;
+import com.vk.api.sdk.objects.groups.responses.IsMemberUserIdsResponse;
 import com.vk.api.sdk.objects.photos.Photo;
 import com.vk.api.sdk.objects.photos.PhotoSizes;
-import com.vk.api.sdk.objects.photos.PhotoUpload;
 import com.vk.api.sdk.objects.users.Fields;
 import com.vk.api.sdk.objects.users.UserFull;
+import com.vk.api.sdk.objects.users.UserMin;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 import com.vk.api.sdk.objects.wall.GetFilter;
-import com.vk.api.sdk.objects.wall.Wallpost;
 import com.vk.api.sdk.objects.wall.WallpostFull;
 import data.Coordinate;
 
-import javax.naming.Context;
 import java.net.URI;
-import java.security.InvalidKeyException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,11 +33,13 @@ public class ApiService {
     TransportClient transportClient;
     VkApiClient vk;
     UserActor actor;
+    ServiceActor serviceActor;
 
     public ApiService() {
         transportClient = new HttpTransportClient();
         vk = new VkApiClient(transportClient);
         actor = new UserActor(USER_ID, TOKEN);
+        serviceActor = new ServiceActor(APP_ID, SERV_KEY);
     }
 
     public List<UserFull> getUsersByUserName(String name, List<Fields> fields, Integer count) throws ClientException, ApiException {
@@ -158,9 +157,9 @@ public class ApiService {
     }
 
     public List<WallpostFull> getNotesByUserID(Integer id) throws ClientException, ApiException {
-        List<WallpostFull> list = new ArrayList<>();
+        List<WallpostFull> list;
         List<WallpostFull> res = new ArrayList<>();
-        int i = 0;
+
         int j = 0;
         do {
             list = vk.wall()
@@ -171,9 +170,79 @@ public class ApiService {
                     .count(MAX_COUNT)
                     .execute()
                     .getItems();
-         res = Stream.concat(res.stream(), list.stream()).collect(Collectors.toList());
-            j+= MAX_COUNT;
-        }while (list.size() != 0);
+            res = Stream.concat(res.stream(), list.stream()).collect(Collectors.toList());
+            j += MAX_COUNT;
+        } while (list.size() != 0);
         return res;
+    }
+
+    public List<GetMutualTargetUidsResponse> getMutualFriendsByUserID(Integer id) throws ClientException, ApiException {
+        List<UserFull> friends = getFriendsByUserID(id);
+        List<Integer> targetUids = new ArrayList<>();
+
+        for (UserFull friend : friends
+        ) {
+            if (!friend.getIsClosed() && friend.getDeactivated() == null) {
+                targetUids.add(friend.getId());
+            }
+        }
+
+        Integer[] targetUidsArr = targetUids.stream()
+                .filter(Objects::nonNull)
+                .toArray(Integer[]::new);
+        return vk.friends()
+                .getMutualWithTargetUids(actor, targetUidsArr)
+                .sourceUid(id)
+                .execute().stream()
+                .filter(resp -> resp.getCommonCount() > 0)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserFull> getFriendsByUserID(Integer id) throws ClientException, ApiException {
+        return vk.friends()
+                .getWithFields(actor, Fields.DOMAIN)
+                .userId(id)
+                .execute()
+                .getItems();
+    }
+
+    public Map<Integer, List<Integer>> getMutualGroupsByUserID(Integer id) throws ClientException, InterruptedException, ApiException {
+        List<GetByIdObjectLegacyResponse> groups = getGroupsByUserID(id, new ArrayList<>())
+                .stream()
+                .filter(group -> group.getIsClosed().getValue().equals("0"))
+                .collect(Collectors.toList());
+        Integer[] friends = getFriendsByUserID(id).stream()
+                .map(UserMin::getId)
+                .toArray(Integer[]::new);
+
+        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        for (GetByIdObjectLegacyResponse group : groups) {
+            List<Integer> areMembers;
+            try {
+                areMembers = vk.groups()
+                        .isMemberWithUserIds(actor, group.getId().toString(), friends)
+                        .execute()
+                        .stream()
+                        .filter(IsMemberUserIdsResponse::isMember)
+                        .map(IsMemberUserIdsResponse::getUserId)
+                        .collect(Collectors.toList());
+            } catch (Exception e) {
+                Thread.sleep(325);
+                continue;
+            }
+
+            map.put(group.getId(), areMembers);
+            Thread.sleep(325);
+        }
+
+        Map<Integer, List<Integer>> resMap = new HashMap<>();
+        for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()
+        ) {
+            if (entry.getValue().size() > 0)
+                resMap.put(entry.getKey(),entry.getValue());
+        }
+
+        return resMap;
     }
 }

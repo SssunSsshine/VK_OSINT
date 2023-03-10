@@ -5,6 +5,7 @@ import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse;
 import com.vk.api.sdk.objects.photos.Photo;
 import com.vk.api.sdk.objects.users.Fields;
 import com.vk.api.sdk.objects.users.UserFull;
+import com.vk.api.sdk.objects.users.UserMin;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 import com.vk.api.sdk.objects.wall.WallpostFull;
 import data.Coordinate;
@@ -12,26 +13,29 @@ import logic.ApiService;
 import logic.FileRepository;
 import logic.LocationService;
 
-import java.lang.Object;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
 
 
     public static final Integer EXAMPLE_ID = 4610337;
+    public static final Integer KRAMARENKO_ID = 158586728;
 
     public static void main(String[] args) throws ClientException, ApiException, InterruptedException {
         ApiService apiService = new ApiService();
         FileRepository fileRepository = new FileRepository();
         LocationService locationService = new LocationService();
 
-        System.out.println(locationService.getLocationByCoordinates(50.864906, 39.068485));
+        fileRepository.mutualGroupsWithFriendsToFile(apiService.getMutualGroupsByUserID(KRAMARENKO_ID), "mutualGroups.txt");
+
+        fileRepository.mutualFriendsIDsToFile(apiService.getMutualFriendsByUserID(KRAMARENKO_ID), "mutualFriends.txt");
+
+        fileRepository.friendsToFile(apiService.getFriendsByUserID(KRAMARENKO_ID).stream()
+                .map(UserMin::getId).collect(Collectors.toList()), "friends.txt");
+
         //извлечение текста из записей пользователя
         List<WallpostFull> posts = apiService.getNotesByUserID(EXAMPLE_ID);
         fileRepository.postsToFile(posts,"posts.txt");
@@ -73,6 +77,4 @@ public class Main {
 
         fileRepository.userToFile(user, groups, photosURI, pathUser);
     }
-
-
 }

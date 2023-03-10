@@ -11,5 +11,6 @@ public class DataForConnection {
 
     public static final String REDIRECT_URI = "https://oauth.vk.com/blank.html";
 
+    public static final String SERV_KEY = "1708d8fa1708d8fa1708d8fa43141a0db9117081708d8fa74f3fe2005f3db148743891b";
     public static final int USER_ID = 211762761;
 }

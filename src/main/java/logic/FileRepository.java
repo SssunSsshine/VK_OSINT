@@ -1,5 +1,6 @@
 package logic;
 
+import com.vk.api.sdk.objects.friends.responses.GetMutualTargetUidsResponse;
 import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse;
 import com.vk.api.sdk.objects.users.UserFull;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
@@ -12,11 +13,49 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 public class FileRepository {
-    public void coordinatesToFile(List<Coordinate> coordinates, String path){
+
+    public void mutualGroupsWithFriendsToFile(Map<Integer, List<Integer>> map, String path){
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
-            for (Coordinate coordinate: coordinates
+            bufferedWriter.write("Список общих групп с друзьями (Формат id группы: список id друзей)\n");
+            for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()
+            ) {
+                bufferedWriter.write(entry.getKey()
+                        + ": " + entry.getValue() + "\n\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void mutualFriendsIDsToFile(List<GetMutualTargetUidsResponse> mutualFriends, String path) {
+        try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
+            bufferedWriter.write("Список общих друзей с друзьями\n");
+            for (GetMutualTargetUidsResponse mutFriend : mutualFriends
+            ) {
+                bufferedWriter.write(mutFriend.getId()
+                        + ": " + mutFriend.getCommonFriends() + "\n\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void friendsToFile(List<Integer> ids, String path) {
+        try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
+            for (Integer id : ids
+            ) {
+                bufferedWriter.write(id.toString() + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void coordinatesToFile(List<Coordinate> coordinates, String path) {
+        try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
+            for (Coordinate coordinate : coordinates
             ) {
                 bufferedWriter.write(coordinate.toString() + "\n\n");
             }
@@ -24,11 +63,12 @@ public class FileRepository {
             throw new RuntimeException(e);
         }
     }
+
     public void postsToFile(List<WallpostFull> posts, String pathPosts) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(pathPosts))) {
             for (WallpostFull post : posts
             ) {
-                if(post.getText().isBlank()) continue;
+                if (post.getText().isBlank()) continue;
                 bufferedWriter.write("\"" + post.getText() + "\"\n\n");
             }
         } catch (IOException e) {
