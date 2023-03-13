@@ -11,12 +11,16 @@ import com.vk.api.sdk.objects.wall.WallpostFull;
 import data.Coordinate;
 import logic.ApiService;
 import logic.FileRepository;
+import logic.GraphService;
 import logic.LocationService;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static data.DataForConnection.USER_ID;
 
 public class Main {
 
@@ -28,6 +32,11 @@ public class Main {
         ApiService apiService = new ApiService();
         FileRepository fileRepository = new FileRepository();
         LocationService locationService = new LocationService();
+        GraphService graphService = new GraphService();
+
+
+        graphService.createFriendsGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
+        Map<Integer, List<UserFull>> contactMatrix = graphService.getGraphFriends();
 
         fileRepository.mutualGroupsWithFriendsToFile(apiService.getMutualGroupsByUserID(KRAMARENKO_ID), "mutualGroups.txt");
 

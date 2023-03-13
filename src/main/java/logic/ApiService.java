@@ -157,9 +157,9 @@ public class ApiService {
     }
 
     public List<WallpostFull> getNotesByUserID(Integer id) throws ClientException, ApiException {
-        List<WallpostFull> list;
+        List<WallpostFull> list = new ArrayList<>();
         List<WallpostFull> res = new ArrayList<>();
-
+        int i = 0;
         int j = 0;
         do {
             list = vk.wall()
