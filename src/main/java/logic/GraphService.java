@@ -1,27 +1,92 @@
 package logic;
 
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.users.Fields;
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxCompactTreeLayout;
+import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.util.mxCellRenderer;
 import com.vk.api.sdk.objects.users.UserFull;
+import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.Graph;
+import org.jgrapht.ext.JGraphXAdapter;
+import org.jgrapht.graph.DefaultDirectedGraph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class GraphService {
-    private static final Integer MAX_GRAPH_SIZE = 200;
-    private final Map<Integer, List<UserFull>> graphFriends;
+    private static final Integer MAX_GRAPH_SIZE = 100;
+    //private final Map<Integer, List<UserFull>> graphFriends;
     private final ApiService apiService;
     private static Integer level = 0;
-
+    private static Graph<UserFull, DefaultEdge> g;
     public GraphService() {
-        this.graphFriends = new HashMap<>();
+        //this.graphFriends = new HashMap<>();
         apiService = new ApiService();
+        g = new DefaultDirectedGraph<>(DefaultEdge.class);
     }
 
-    public Map<Integer, List<UserFull>> getGraphFriends() {
+
+    public void createGraph(UserFull user) throws IOException {
+        if (user.getIsClosed() || user.getDeactivated() != null ||
+                (g.containsVertex(user) && g.edgesOf(user).size() > 1)) {
+            int k = g.edgesOf(user).size();
+            return;
+        }
+        if(!g.containsVertex(user))
+            g.addVertex(user);
+        try {
+            Thread.sleep(350);
+            if (level < 3) {
+                level++;
+            } else {
+                level--;
+                return;
+            }
+            List<UserFull> friends = apiService.getFriendsByUserID(user.getId());
+            int i = 0;
+            for (UserFull friend : friends) {
+                if(i > 10){
+                    break;
+                }
+                if(!g.containsVertex(friend))
+                    g.addVertex(friend);
+                if(!g.containsEdge(user, friend) && !g.containsEdge(friend, user))
+                    g.addEdge(user, friend);
+                i++;
+            }
+
+            if (g.vertexSet().size() < MAX_GRAPH_SIZE) {
+                for (UserFull friend : friends) {
+                    if (g.vertexSet().size() < MAX_GRAPH_SIZE) {
+                        createGraph(friend);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void givenAdaptedGraph_whenWriteBufferedImage_thenFileShouldExist() throws IOException {
+        File imgFile = new File("graph.png");
+        imgFile.createNewFile();
+
+        JGraphXAdapter<UserFull, DefaultEdge> graphAdapter =
+                new JGraphXAdapter<>(g);
+        mxIGraphLayout layout = new mxCompactTreeLayout(graphAdapter);
+        layout.execute(graphAdapter.getDefaultParent());
+
+        BufferedImage image =
+                mxCellRenderer.createBufferedImage(graphAdapter, null, 1, Color.WHITE, false,null);
+        ImageIO.write(image, "PNG", imgFile);
+    }
+
+    /*public Map<Integer, List<UserFull>> getGraphFriends() {
         return graphFriends;
     }
 
@@ -54,5 +119,5 @@ public class GraphService {
         } catch (Exception e) {
             System.out.println(e);
         }
-    }
+    }*/
 }

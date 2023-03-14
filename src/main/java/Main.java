@@ -14,6 +14,7 @@ import logic.FileRepository;
 import logic.GraphService;
 import logic.LocationService;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,17 @@ public class Main {
     public static final Integer EXAMPLE_ID = 4610337;
     public static final Integer KRAMARENKO_ID = 158586728;
 
-    public static void main(String[] args) throws ClientException, ApiException, InterruptedException {
+    public static void main(String[] args) throws ClientException, ApiException, InterruptedException, IOException {
         ApiService apiService = new ApiService();
         FileRepository fileRepository = new FileRepository();
         LocationService locationService = new LocationService();
         GraphService graphService = new GraphService();
 
+        graphService.createGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
+        graphService.givenAdaptedGraph_whenWriteBufferedImage_thenFileShouldExist();
 
-        graphService.createFriendsGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
-        Map<Integer, List<UserFull>> contactMatrix = graphService.getGraphFriends();
+        /*graphService.createFriendsGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
+        Map<Integer, List<UserFull>> contactMatrix = graphService.getGraphFriends();*/
 
         fileRepository.mutualGroupsWithFriendsToFile(apiService.getMutualGroupsByUserID(KRAMARENKO_ID), "mutualGroups.txt");
 
