@@ -1,11 +1,7 @@
 package logic;
 
 import com.mxgraph.layout.*;
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.layout.orthogonal.mxOrthogonalLayout;
 import com.mxgraph.util.mxCellRenderer;
-import com.vk.api.sdk.exceptions.ApiException;
-import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.users.UserFull;
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.Graph;
@@ -17,36 +13,51 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
 
 public class GraphService {
     private static final Integer MAX_GRAPH_SIZE = 100;
+    public static final int MAX_AMOUNT_OF_FRIENDS = 10;
+    public static int MAX_LEVEL = 2;
+    public static final int MIN_LEVEL = 0;
+
     //private final Map<Integer, List<UserFull>> graphFriends;
     private final ApiService apiService;
-    private static Integer level = 0;
+    private static Integer level = MIN_LEVEL;
     private static Graph<UserFull, DefaultEdge> g;
+
     public GraphService() {
         //this.graphFriends = new HashMap<>();
         apiService = new ApiService();
         g = new DefaultDirectedGraph<>(DefaultEdge.class);
     }
 
+    public GraphService(Integer maxLvl) {
+        //this.graphFriends = new HashMap<>();
+        apiService = new ApiService();
+        g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        MAX_LEVEL = maxLvl;
+    }
 
-    public void createGraph(UserFull user) throws IOException, ClientException, ApiException, InterruptedException {
+    public void createExampleGraph(UserFull user){
         level++;
-        if (level > 2 || level < 0)
+        if (level > MAX_LEVEL || level < MIN_LEVEL)
             return;
+
         if (user.getIsClosed() || user.getDeactivated() != null ||
                 (g.containsVertex(user) && g.edgesOf(user).size() > 1)) {
             return;
         }
+
         if(!g.containsVertex(user))
             g.addVertex(user);
-        //try {
+
+        try {
             Thread.sleep(350);
+
             List<UserFull> friends = apiService.getFriendsByUserID(user.getId());
-            friends.subList(10,friends.size()).clear();
+            friends.subList(MAX_AMOUNT_OF_FRIENDS,friends.size()).clear();
+
             for (UserFull friend : friends) {
                 if(!g.containsVertex(friend))
                     g.addVertex(friend);
@@ -57,17 +68,55 @@ public class GraphService {
             if (g.vertexSet().size() < MAX_GRAPH_SIZE) {
                 for (UserFull friend : friends) {
                     if (g.vertexSet().size() < MAX_GRAPH_SIZE) {
-                        createGraph(friend);
+                        createExampleGraph(friend);
                         level--;
                     }
                 }
             }
-        //} catch (Exception e) {
-          //  System.out.println(e);
-        //}
+        } catch (Exception e) {
+           System.out.println(e);
+        }
     }
 
-    public void givenAdaptedGraph_whenWriteBufferedImage_thenFileShouldExist() throws IOException {
+    public void createGraph(UserFull user){
+        level++;
+        if (level > MAX_LEVEL || level < MIN_LEVEL)
+            return;
+
+        if (user.getIsClosed() || user.getDeactivated() != null ||
+                (g.containsVertex(user) && g.edgesOf(user).size() > 1)) {
+            return;
+        }
+
+        if(!g.containsVertex(user))
+            g.addVertex(user);
+
+        try {
+            Thread.sleep(350);
+
+            List<UserFull> friends = apiService.getFriendsByUserID(user.getId());
+
+            for (UserFull friend : friends) {
+                if(!g.containsVertex(friend))
+                    g.addVertex(friend);
+                if(!g.containsEdge(user, friend) && !g.containsEdge(friend, user))
+                    g.addEdge(user, friend);
+            }
+
+            if (g.vertexSet().size() < MAX_GRAPH_SIZE) {
+                for (UserFull friend : friends) {
+                    if (g.vertexSet().size() < MAX_GRAPH_SIZE) {
+                        createExampleGraph(friend);
+                        level--;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void graphToImage() throws IOException {
         File imgFile = new File("graphTree.png");
         imgFile.createNewFile();
 

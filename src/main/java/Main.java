@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static data.DataForConnection.USER_ID;
@@ -35,8 +34,8 @@ public class Main {
         LocationService locationService = new LocationService();
         GraphService graphService = new GraphService();
 
-        graphService.createGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
-        graphService.givenAdaptedGraph_whenWriteBufferedImage_thenFileShouldExist();
+        graphService.createExampleGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
+        graphService.graphToImage();
 
         /*graphService.createFriendsGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
         Map<Integer, List<UserFull>> contactMatrix = graphService.getGraphFriends();*/
