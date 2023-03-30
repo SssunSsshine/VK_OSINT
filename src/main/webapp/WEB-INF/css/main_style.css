@@ -1,0 +1,26 @@
+.btn-primary {
+    background: linear-gradient(#5725ba,#7e22a5);
+    border: none;
+    font-size:20pt;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+.btn-primary:hover, .btn-primary:active{
+    background: linear-gradient(#371778,#4d1465) ;
+    border: none !important;
+}
+
+.fs{
+    font-size:40pt;
+    color: white;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-bottom: 50pt;
+}
+
+.pic{
+    width: 70%;
+}
+
+
+
