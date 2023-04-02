@@ -96,20 +96,19 @@ public class FileRepository {
         }
     }
 
-    public void userToFile(List<GetResponse> user, List<GetByIdObjectLegacyResponse> groups, List<URI> photos, String pathUser) {
+    public void userToFile(GetResponse user, List<GetByIdObjectLegacyResponse> groups, List<URI> photos, String pathUser) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(pathUser))) {
-            GetResponse response = user.get(0);
-            bufferedWriter.write("ID: " + response.getId() + "\n"
-                    + "ScreenName: " + response.getScreenName() + "\n"
-                    + "Имя Фамилия: " + response.getFirstName() + " " + response.getLastName() + "\n"
-                    + "День рождения: " + response.getBdate() + "\n"
-                    + "Страна: " + response.getCountry() + "\n"
-                    + "Город: " + response.getCity() + "\n"
-                    + "Пол: " + response.getSex() + "\n"
-                    + "Интересы: " + response.getInterests() + "\n"
-                    + "Книги: " + response.getBooks() + "\n"
-                    + "Статус: " + response.getStatus() + "\n"
-                    + "Instagram: " + response.getInstagram() + "\n\n");
+            bufferedWriter.write("ID: " + user.getId() + "\n"
+                    + "ScreenName: " + user.getScreenName() + "\n"
+                    + "Имя Фамилия: " + user.getFirstName() + " " + user.getLastName() + "\n"
+                    + "День рождения: " + user.getBdate() + "\n"
+                    + "Страна: " + user.getCountry() + "\n"
+                    + "Город: " + user.getCity() + "\n"
+                    + "Пол: " + user.getSex() + "\n"
+                    + "Интересы: " + user.getInterests() + "\n"
+                    + "Книги: " + user.getBooks() + "\n"
+                    + "Статус: " + user.getStatus() + "\n"
+                    + "Instagram: " + user.getInstagram() + "\n\n");
 
             bufferedWriter.write("Группы:\n");
             for (GetByIdObjectLegacyResponse gr : groups) {
@@ -123,6 +122,22 @@ public class FileRepository {
             for (URI uri : photos) {
                 bufferedWriter.write(uri + "\n\n");
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void userToFile(GetResponse user, String pathUser) {
+        try (Writer bufferedWriter = new BufferedWriter(new FileWriter(pathUser))) {
+            bufferedWriter.write("ID: " + user.getId() + "\n"
+                    + "ScreenName: " + user.getScreenName() + "\n"
+                    + "Имя Фамилия: " + user.getFirstName() + " " + user.getLastName() + "\n"
+                    + "День рождения: " + user.getBdate() + "\n"
+                    + "Страна: " + user.getCountry() + "\n"
+                    + "Город: " + user.getCity() + "\n"
+                    + "Пол: " + user.getSex() + "\n"
+                    + "Интересы: " + user.getInterests() + "\n"
+                    + "Книги: " + user.getBooks() + "\n"
+                    + "Статус: " + user.getStatus());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

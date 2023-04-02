@@ -34,7 +34,16 @@ public class Main {
         LocationService locationService = new LocationService();
         GraphService graphService = new GraphService();
 
-        graphService.createExampleGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
+        List<Fields> fields = new ArrayList<>();
+        fields.add(Fields.COUNTRY);
+        fields.add(Fields.CITY);
+        fields.add(Fields.BDATE);
+        fields.add(Fields.STATUS);
+        fields.add(Fields.SEX);
+        fields.add(Fields.BOOKS);
+        fields.add(Fields.INTERESTS);
+
+        graphService.createExampleGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()));
         graphService.graphToImage();
 
         /*graphService.createFriendsGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
@@ -64,22 +73,15 @@ public class Main {
             System.out.println(locationService.getLocationByCoordinates(Double.parseDouble(coordinate.getLat().toString()),Double.parseDouble(coordinate.getLng().toString())));
         }
 
-        List<Fields> fields = new ArrayList<>();
-        fields.add(Fields.COUNTRY);
-        fields.add(Fields.CITY);
-        fields.add(Fields.BDATE);
-        fields.add(Fields.STATUS);
-        fields.add(Fields.SEX);
-        fields.add(Fields.BOOKS);
-        fields.add(Fields.INTERESTS);
+
 
         List<UserFull> users = apiService.getUsersByUserName("Ирина Воронина", fields, 100);
 
-        List<GetResponse> user = apiService.getUserByUserID(EXAMPLE_ID.toString(), fields);
+        GetResponse user = apiService.getUserByUserID(EXAMPLE_ID.toString(), fields);
 
-        List<GetByIdObjectLegacyResponse> groups = apiService.getGroupsByUserID(user.get(0).getId(), new ArrayList<>());
+        List<GetByIdObjectLegacyResponse> groups = apiService.getGroupsByUserID(user.getId(), new ArrayList<>());
 
-        List<URI> photosURI = apiService.getURIFromPhotos(apiService.getPhotosByUserID(user.get(0).getId()));
+        List<URI> photosURI = apiService.getURIFromPhotos(apiService.getPhotosByUserID(user.getId()));
 
         String pathUsers = "users.txt";
         String pathUser = "user.txt";

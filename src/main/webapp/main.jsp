@@ -9,8 +9,32 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous">
-      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main_style.css" >
+<style>
+    .btn-primary {
+           background: linear-gradient(#5725ba,#7e22a5);
+           border: none;
+           font-size:20pt;
+           font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+       }
+
+
+       .btn-primary:hover, .btn-primary:active{
+           background: linear-gradient(#371778,#4d1465) ;
+           border: none !important;
+       }
+
+       .fs{
+           font-size:40pt;
+           color: white;
+           font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+           margin-bottom: 50pt;
+       }
+
+       .pic{
+           width: 70%;
+       }</style>
 </head>
+
 <body style="background: linear-gradient(#632ece,#9929c9);">
     <header>
 		<nav class="navbar navbar-expand-md navbar-dark"
@@ -33,10 +57,10 @@
 						</div>
 						<div class="row">
 							<div class="col-sm text-center" >
-								<a href="<%=request.getContextPath()%>/search_by_fullname" class="btn btn-primary btn-lg btn-block" role="button">By User Full Name</a>
+								<a href="<%=request.getContextPath()%>/MainServlet?action=search_by_fullname" class="btn btn-primary btn-lg btn-block" role="button">By User Full Name</a>
 							</div>
 							<div class="col-sm text-center">
-								<a href="<%=request.getContextPath()%>/search_by_id" class="btn btn-primary btn-lg btn-block" role="button">By User ID</a>
+								<a href="<%=request.getContextPath()%>/MainServlet?action=search_by_id" class="btn btn-primary btn-lg btn-block" role="button">By User ID</a>
 							</div>
 						</div>
 					</div>
@@ -45,7 +69,7 @@
 			</div>
 		</div>
 		<div class="row justify-content-left">
-			<img src="<%=request.getContextPath()%>/pictures/juicy-scientist-with-magnifying-glass.gif" class="pic">
+			<img src=<%=request.getContextPath()%>/pictures/juicy-scientist-with-magnifying-glass.gif class="pic">
 		</div>
 	</div>
 </body>

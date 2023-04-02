@@ -52,12 +52,16 @@ public class ApiService {
                 .getItems();
     }
 
-    public List<GetResponse> getUserByUserID(String id, List<Fields> fields) throws ClientException, ApiException {
-        return vk.users()
-                .get(actor)
-                .userIds(id)
-                .fields(fields)
-                .execute();
+    public GetResponse getUserByUserID(String id, List<Fields> fields) throws ClientException, ApiException {
+            List<GetResponse> users = vk.users()
+                                        .get(actor)
+                                        .userIds(id)
+                                        .fields(fields)
+                                        .execute();
+            if(users.size() == 0){
+                return null;
+            }
+        return users.get(0);
     }
 
     public List<GetByIdObjectLegacyResponse> getGroupsByUserID(Integer id, List<com.vk.api.sdk.objects.groups.Fields> fields) throws InterruptedException, ClientException, ApiException {
