@@ -19,5 +19,5 @@ public class DataForConnection {
     public static final String SERV_KEY = "1708d8fa1708d8fa1708d8fa43141a0db9117081708d8fa74f3fe2005f3db148743891b";
     public static final Integer USER_ID = 211762761;
 
-    public static final List<Fields> FIELDS = Arrays.asList(Fields.COUNTRY,Fields.CITY,Fields.BDATE,Fields.STATUS,Fields.SEX,Fields.BOOKS,Fields.INTERESTS);
+    public static final List<Fields> FIELDS = Arrays.asList(Fields.COUNTRY,Fields.CITY,Fields.BDATE,Fields.STATUS,Fields.SEX,Fields.BOOKS,Fields.INTERESTS, Fields.PHOTO_200);
 }

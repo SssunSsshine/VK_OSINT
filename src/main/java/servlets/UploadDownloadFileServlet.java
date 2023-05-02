@@ -2,20 +2,20 @@ package servlets;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.users.responses.GetResponse;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
 import logic.ApiService;
 import logic.FileRepository;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static data.DataForConnection.FIELDS;
 
@@ -37,14 +37,10 @@ public class UploadDownloadFileServlet extends HttpServlet {
         String fileName = "user"+id+".txt";
         try {
             fileRepository.userToFile(apiService.getUserByUserID(id,FIELDS),uploadPath+File.separator+fileName);
-        } catch (ClientException e) {
-            throw new RuntimeException(e);
-        } catch (ApiException e) {
+        } catch (ClientException | ApiException e) {
             throw new RuntimeException(e);
         }
-        if(fileName == null || fileName.equals("")){
-            throw new ServletException("File Name can't be null or empty");
-        }
+
         File file = new File(uploadPath+File.separator+fileName);
         if(!file.exists()){
             throw new ServletException("File doesn't exists on server.");

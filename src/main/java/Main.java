@@ -20,15 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static data.DataForConnection.FIELDS;
 import static data.DataForConnection.USER_ID;
 
 public class Main {
 
-
+    public static final Integer EXAMPLE_LOC_ID = 741461470;
     public static final Integer EXAMPLE_ID = 4610337;
     public static final Integer KRAMARENKO_ID = 158586728;
 
     public static void main(String[] args) throws ClientException, ApiException, InterruptedException, IOException {
+
         ApiService apiService = new ApiService();
         FileRepository fileRepository = new FileRepository();
         LocationService locationService = new LocationService();
@@ -43,6 +45,11 @@ public class Main {
         fields.add(Fields.BOOKS);
         fields.add(Fields.INTERESTS);
 
+        List<Photo> photosByCoordinates = apiService.getPhotosByCoordinates(51, 39, 40000);
+        Integer id = photosByCoordinates.get(10).getOwnerId();
+
+        List<UserFull> users = apiService.getUsersByUserName("Ирина Воронина", FIELDS,10);
+        String photo = String.valueOf(users.get(0).getPhoto100());
         graphService.createExampleGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()));
         graphService.graphToImage();
 
@@ -61,8 +68,7 @@ public class Main {
         fileRepository.postsToFile(posts,"posts.txt");
 
         //извлечение координат из фотографий с геометками
-        List<Photo> photosByCoordinates = apiService.getPhotosByCoordinates(51, 39, 40000);
-        Integer id = photosByCoordinates.get(10).getOwnerId();
+
         List<Photo> photosFromUserWithCoord = apiService.getPhotosByUserID(id);
         fileRepository.coordinatesToFile(apiService.getCoordinatesFromPhotos(photosFromUserWithCoord), "coordinates.txt");
 
@@ -73,14 +79,9 @@ public class Main {
             System.out.println(locationService.getLocationByCoordinates(Double.parseDouble(coordinate.getLat().toString()),Double.parseDouble(coordinate.getLng().toString())));
         }
 
-
-
-        List<UserFull> users = apiService.getUsersByUserName("Ирина Воронина", fields, 100);
-
         GetResponse user = apiService.getUserByUserID(EXAMPLE_ID.toString(), fields);
 
         List<GetByIdObjectLegacyResponse> groups = apiService.getGroupsByUserID(user.getId(), new ArrayList<>());
-
         List<URI> photosURI = apiService.getURIFromPhotos(apiService.getPhotosByUserID(user.getId()));
 
         String pathUsers = "users.txt";

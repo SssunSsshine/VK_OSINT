@@ -10,12 +10,7 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous">
       <link rel = "stylesheet" href="${pageContext.request.contextPath}/resources/css/main_style.css">
-      <style>
-        .fs-btn{
-        font-size:13pt;
-        margin-bottom:5pt;
-        }
-      </style>
+
 </head>
 <body style="background: linear-gradient(#632ece,#9929c9);">
     <header>
@@ -95,7 +90,7 @@
                             </fieldset>
                         </c:if>
 
-                        <c:if test="${user.getStatus() != null}">
+                        <c:if test="${user.getStatus() != null && !user.getStatus().isBlank()}">
                             <fieldset class="form-group">
                                 <label>User Status</label> <input type="text"
                                     value="<c:out value='${user.getStatus()}' />" class="form-control"
@@ -103,7 +98,7 @@
                             </fieldset>
                         </c:if>
 
-                        <c:if test="${user.getBooks() != null}">
+                        <c:if test="${user.getBooks() != null && !user.getBooks().isBlank()}">
                             <fieldset class="form-group">
                                 <label>User Books</label> <input type="text"
                                     value="<c:out value='${user.getBooks()}' />" class="form-control"
@@ -111,39 +106,144 @@
                             </fieldset>
                         </c:if>
 
-                        <c:if test="${user.getInterests() != null}">
+                        <c:if test="${user.getInterests() != null && !user.getInterests().isBlank()}">
                             <fieldset class="form-group">
                                 <label>User Interests</label> <input type="text"
                                     value="<c:out value='${user.getInterests()}' />" class="form-control"
                                     name="interests" required="required" readonly>
                             </fieldset>
                         </c:if>
+
+                        <c:if test="${locations != null}">
+                        <label>User Locations</label>
+                            <c:forEach  var="location" items="${locations}">
+                                <p>
+                                    ${location}
+                                </p>
+                            </c:forEach>
+                        </c:if>
+
+                        <c:if test="${notes != null}">
+                        <label>User Notes</label>
+                            <c:forEach  var="note" items="${notes}">
+                                <p>
+                                    ${note.getText()}
+                                </p>
+                            </c:forEach>
+                        </c:if>
+
+                        <c:if test="${friends != null}">
+                            <label>User Friends</label>
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Photo</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Full Name</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                    <c:forEach var="friend" items="${friends}">
+                                        <tr>
+                                            <td>
+                                                <img src=${String.valueOf(friend.getPhoto200())} class = "pic">
+                                            </td>
+                                            <td>
+                                                <p>friend.id</p>
+                                            </td>
+                                            <td>
+                                                <p>friend.firstName friend.lastName</p>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                                </table>
+                        </c:if>
+
+                        <c:if test="${groups != null}">
+                            <label>User Groups</label>
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Description</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                    <c:forEach var="group" items="${groups}">
+                                        <tr>
+                                            <td>
+                                                <p>group.id</p>
+                                            </td>
+                                            <td>
+                                                <p>group.name</p>
+                                            </td>
+                                            <td>
+                                                <p>group.status</p>
+                                            </td>
+                                            <td>
+                                                <p>group.description</p>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:if>
+
+                        <c:if test="${mutualGroups != null}">
+                            <label>User Mutual Groups</label>
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Group Info</th>
+                                    <th scope="col">Friends Ids</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                                    <c:forEach var="entry" items="${mutualGroups}">
+                                        <tr>
+                                            <td>
+                                                <p>entry.getKey()</p>
+                                            </td>
+                                            <td>
+                                                <p>entry.getValue()</p>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:if>
+
+                        <c:if test="${photos != null}">
+                            <c:forEach  var="photo" items="${photos}">
+                                <p>
+                                    <img src=${String.valueOf(photo)} class = "pic">
+                                </p>
+                            </c:forEach>
+                        </c:if>
+
                         <div class="container">
                            <div class="row">
+                                  <div class="col-sm text-center" >
+                                       <a href="<%=request.getContextPath()%>/friends" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Mutual Friends</a>
+                                  </div>
                                 <div class="col-sm text-center" >
-                                    <a href="<%=request.getContextPath()%>/MainServlet?action=groups" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Groups</a>
-                                </div>
-                                <div class="col-sm text-center" >
-                                    <a href="<%=request.getContextPath()%>/MainServlet?action=photos" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Photos</a>
+                                    <a href="<%=request.getContextPath()%>/groups" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Groups</a>
                                 </div>
                            </div>
                            <div class="row">
                                <div class="col-sm text-center" >
-                                    <a href="<%=request.getContextPath()%>/MainServlet?action=friends" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Mutual Friends</a>
-                               </div>
-                               <div class="col-sm text-center" >
-                                    <a href="<%=request.getContextPath()%>/MainServlet?action=geotags" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Geotags</a>
-                               </div>
-                            </div>
-                           <div class="row">
-                               <div class="col-sm text-center" >
-                                    <a href="<%=request.getContextPath()%>/MainServlet?action=wall" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Wall Notes</a>
+                                   <a href="<%=request.getContextPath()%>/photos" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Photos</a>
                                </div>
                                <div class="col-sm text-center" >
                                      <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
                                </div>
-                            </div>
-
+                           </div>
                     </c:if>
 				</form>
 			</div>

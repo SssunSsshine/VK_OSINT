@@ -1,7 +1,7 @@
 .btn-primary {
     background: linear-gradient(#5725ba,#7e22a5);
     border: none;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family:-apple-system,system-ui,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
 }
 
 .fs-btn{
@@ -17,10 +17,17 @@
 .fs{
     font-size:40pt;
     color: white;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family:-apple-system,system-ui,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
     margin-bottom: 50pt;
 }
-
+.fs-search{
+  font-size:18pt;
+  color: black;
+  font-family:-apple-system,system-ui,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+}
+.fs-header{
+        font-size:30pt;
+}
 .pic{
     width: 70%;
 }

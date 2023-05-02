@@ -17,10 +17,10 @@ import java.util.Map;
 
 public class FileRepository {
 
-    public void mutualGroupsWithFriendsToFile(Map<Integer, List<Integer>> map, String path){
+    public void mutualGroupsWithFriendsToFile(Map<String, List<Integer>> map, String path){
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
             bufferedWriter.write("Список общих групп с друзьями (Формат id группы: список id друзей)\n");
-            for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()
+            for (Map.Entry<String, List<Integer>> entry : map.entrySet()
             ) {
                 bufferedWriter.write(entry.getKey()
                         + ": " + entry.getValue() + "\n\n");
@@ -34,6 +34,7 @@ public class FileRepository {
             bufferedWriter.write("Список общих друзей с друзьями\n");
             for (GetMutualTargetUidsResponse mutFriend : mutualFriends
             ) {
+
                 bufferedWriter.write(mutFriend.getId()
                         + ": " + mutFriend.getCommonFriends() + "\n\n");
             }

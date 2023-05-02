@@ -53,15 +53,23 @@ public class ApiService {
     }
 
     public GetResponse getUserByUserID(String id, List<Fields> fields) throws ClientException, ApiException {
-            List<GetResponse> users = vk.users()
-                                        .get(actor)
-                                        .userIds(id)
-                                        .fields(fields)
-                                        .execute();
-            if(users.size() == 0){
-                return null;
-            }
+        List<GetResponse> users = vk.users()
+                .get(actor)
+                .userIds(id)
+                .fields(fields)
+                .execute();
+        if (users.size() == 0) {
+            return null;
+        }
         return users.get(0);
+    }
+
+    public List<GetResponse> getUsersByUsersID(List<String> ids, List<Fields> fields) throws ClientException, ApiException {
+        return vk.users()
+                .get(actor)
+                .userIds(ids)
+                .fields(fields)
+                .execute();
     }
 
     public List<GetByIdObjectLegacyResponse> getGroupsByUserID(Integer id, List<com.vk.api.sdk.objects.groups.Fields> fields) throws InterruptedException, ClientException, ApiException {
@@ -91,7 +99,6 @@ public class ApiService {
 
     public List<Coordinate> getCoordinatesFromPhotos(List<Photo> photos) {
         List<Coordinate> coordinates = new ArrayList<>();
-
         for (Photo photo : photos
         ) {
             if (photo.getLat() != null) {
@@ -105,7 +112,6 @@ public class ApiService {
     }
 
     public List<Photo> getPhotosByUserID(Integer id) throws ClientException, ApiException {
-
         List<Photo> photos = new ArrayList<>();
         try {
             List<Photo> wallPhotos = vk.photos()
@@ -161,9 +167,8 @@ public class ApiService {
     }
 
     public List<WallpostFull> getNotesByUserID(Integer id) throws ClientException, ApiException {
-        List<WallpostFull> list = new ArrayList<>();
+        List<WallpostFull> list;
         List<WallpostFull> res = new ArrayList<>();
-        int i = 0;
         int j = 0;
         do {
             list = vk.wall()
@@ -197,29 +202,31 @@ public class ApiService {
         return vk.friends()
                 .getMutualWithTargetUids(actor, targetUidsArr)
                 .sourceUid(id)
-                .execute().stream()
+                .execute()
+                .stream()
                 .filter(resp -> resp.getCommonCount() > 0)
                 .collect(Collectors.toList());
     }
 
     public List<UserFull> getFriendsByUserID(Integer id) throws ClientException, ApiException {
         return vk.friends()
-                .getWithFields(actor, Fields.DOMAIN)
+                .getWithFields(actor, Fields.DOMAIN, Fields.PHOTO_200)
                 .userId(id)
                 .execute()
                 .getItems();
     }
 
-    public Map<Integer, List<Integer>> getMutualGroupsByUserID(Integer id) throws ClientException, InterruptedException, ApiException {
+    public Map<String, List<Integer>> getMutualGroupsByUserID(Integer id) throws ClientException, InterruptedException, ApiException {
         List<GetByIdObjectLegacyResponse> groups = getGroupsByUserID(id, new ArrayList<>())
                 .stream()
                 .filter(group -> group.getIsClosed().getValue().equals("0"))
                 .collect(Collectors.toList());
+
         Integer[] friends = getFriendsByUserID(id).stream()
                 .map(UserMin::getId)
                 .toArray(Integer[]::new);
 
-        Map<Integer, List<Integer>> map = new HashMap<>();
+        Map<String, List<Integer>> map = new HashMap<>();
 
         for (GetByIdObjectLegacyResponse group : groups) {
             List<Integer> areMembers;
@@ -236,15 +243,15 @@ public class ApiService {
                 continue;
             }
 
-            map.put(group.getId(), areMembers);
+            map.put(group.getName() + " " + group.getId(), areMembers);
             Thread.sleep(325);
         }
 
-        Map<Integer, List<Integer>> resMap = new HashMap<>();
-        for (Map.Entry<Integer, List<Integer>> entry : map.entrySet()
+        Map<String, List<Integer>> resMap = new HashMap<>();
+        for (Map.Entry<String, List<Integer>> entry : map.entrySet()
         ) {
             if (entry.getValue().size() > 0)
-                resMap.put(entry.getKey(),entry.getValue());
+                resMap.put(entry.getKey(), entry.getValue());
         }
 
         return resMap;
