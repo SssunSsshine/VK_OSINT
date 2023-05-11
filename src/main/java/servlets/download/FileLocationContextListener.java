@@ -1,4 +1,4 @@
-package servlets;
+package servlets.download;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;

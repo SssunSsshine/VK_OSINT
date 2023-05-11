@@ -26,8 +26,12 @@
   font-family:-apple-system,system-ui,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
 }
 .fs-header{
-        font-size:30pt;
+  font-size:30pt;
 }
 .pic{
     width: 70%;
+}
+
+.table{
+    table-layout:fixed;
 }

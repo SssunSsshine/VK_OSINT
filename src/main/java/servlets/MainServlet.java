@@ -6,17 +6,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import logic.ApiService;
+import logic.repo.ApiRepo;
 
 import java.io.IOException;
 
-@WebServlet("/MainServlet")
+@WebServlet("/mainServlet")
 public class MainServlet extends HttpServlet {
     private static final String JSP_PATH = "/WEB-INF/jsp/";
-    private static ApiService apiService;
+    private static ApiRepo apiService;
     @Override
     public void init(ServletConfig config) throws ServletException {
-        apiService = new ApiService();
+        apiService = new ApiRepo();
     }
 
     @Override
@@ -28,8 +28,6 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         switch (action){
-            case "mutual_groups":
-                break;
             case "mutual_friends":
                 break;
         }

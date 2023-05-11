@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>User Registration Application</title>
+<title>007</title>
 <link rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -14,18 +14,34 @@
 </head>
 <body style="background: linear-gradient(#632ece,#9929c9);">
     <header>
-    		<nav class="navbar navbar-expand-md navbar-dark"
-    			style="background: linear-gradient(#5725ba,#7e22a5)">
-    			<div>
-    				<a href="<%=request.getContextPath()%>/" class="navbar-brand"> VK OSINT  </a>
-    			</div>
-    		</nav>
-    	</header>
+        <nav class="navbar navbar-expand-md navbar-dark"
+             style="background: linear-gradient(#5725ba,#7e22a5)">
+            <div class="container-fluid">
+                <a href="<%=request.getContextPath()%>/" class="navbar-brand"> VK OSINT  </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                  <ul class="navbar-nav">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Photos</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Groups</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Friends</a>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
 	<div class="container col-md-5">
 		<div class="card">
 			<div class="card-body">
-			    <form action="UploadDownloadFileServlet" method="post">
+			    <form action="download-user" method="post">
                     <caption>
                         <h2>
                              User Information
@@ -33,6 +49,11 @@
                     </caption>
 
                     <c:if test="${user != null}">
+                        <div class="container">
+                           <div class="col-sm text-center" >
+                                 <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
+                           </div>
+                        </div>
                         <fieldset class="form-group">
                             <label>User ID</label> <input type="text"
                                 value="<c:out value='${user.getId()}' />" class="form-control"
@@ -131,119 +152,6 @@
                                 </p>
                             </c:forEach>
                         </c:if>
-
-                        <c:if test="${friends != null}">
-                            <label>User Friends</label>
-                            <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">Photo</th>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Full Name</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-
-                                    <c:forEach var="friend" items="${friends}">
-                                        <tr>
-                                            <td>
-                                                <img src=${String.valueOf(friend.getPhoto200())} class = "pic">
-                                            </td>
-                                            <td>
-                                                <p>friend.id</p>
-                                            </td>
-                                            <td>
-                                                <p>friend.firstName friend.lastName</p>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                                </table>
-                        </c:if>
-
-                        <c:if test="${groups != null}">
-                            <label>User Groups</label>
-                            <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Description</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-
-                                    <c:forEach var="group" items="${groups}">
-                                        <tr>
-                                            <td>
-                                                <p>group.id</p>
-                                            </td>
-                                            <td>
-                                                <p>group.name</p>
-                                            </td>
-                                            <td>
-                                                <p>group.status</p>
-                                            </td>
-                                            <td>
-                                                <p>group.description</p>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:if>
-
-                        <c:if test="${mutualGroups != null}">
-                            <label>User Mutual Groups</label>
-                            <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">Group Info</th>
-                                    <th scope="col">Friends Ids</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-
-                                    <c:forEach var="entry" items="${mutualGroups}">
-                                        <tr>
-                                            <td>
-                                                <p>entry.getKey()</p>
-                                            </td>
-                                            <td>
-                                                <p>entry.getValue()</p>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:if>
-
-                        <c:if test="${photos != null}">
-                            <c:forEach  var="photo" items="${photos}">
-                                <p>
-                                    <img src=${String.valueOf(photo)} class = "pic">
-                                </p>
-                            </c:forEach>
-                        </c:if>
-
-                        <div class="container">
-                           <div class="row">
-                                  <div class="col-sm text-center" >
-                                       <a href="<%=request.getContextPath()%>/friends" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Mutual Friends</a>
-                                  </div>
-                                <div class="col-sm text-center" >
-                                    <a href="<%=request.getContextPath()%>/groups" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Groups</a>
-                                </div>
-                           </div>
-                           <div class="row">
-                               <div class="col-sm text-center" >
-                                   <a href="<%=request.getContextPath()%>/photos" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Photos</a>
-                               </div>
-                               <div class="col-sm text-center" >
-                                     <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
-                               </div>
-                           </div>
                     </c:if>
 				</form>
 			</div>

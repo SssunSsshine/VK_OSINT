@@ -1,4 +1,4 @@
-package logic;
+package logic.repo;
 
 import com.vk.api.sdk.objects.friends.responses.GetMutualTargetUidsResponse;
 import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse;
@@ -17,8 +17,19 @@ import java.util.Map;
 
 public class FileRepository {
 
-    public void mutualGroupsWithFriendsToFile(Map<String, List<Integer>> map, String path){
+    public void groupsToFile(GetResponse user, List<GetByIdObjectLegacyResponse> groups, Map<String, List<Integer>> map, String path) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
+            bufferedWriter.write("ID: " + user.getId() + "\n"
+                            + "ScreenName: " + user.getScreenName() + "\n"
+                            + "Имя Фамилия: " + user.getFirstName() + " " + user.getLastName() + "\n\n");
+            bufferedWriter.write("Группы:\n");
+            for (GetByIdObjectLegacyResponse gr : groups) {
+                bufferedWriter.write("ID группы: " + gr.getId() + "\n"
+                        + "Название группы: " + gr.getName() + "\n"
+                        + "Описание группы: " + gr.getDescription() + "\n"
+                        + "Статус группы: " + gr.getStatus() + "\n\n");
+            }
+
             bufferedWriter.write("Список общих групп с друзьями (Формат id группы: список id друзей)\n");
             for (Map.Entry<String, List<Integer>> entry : map.entrySet()
             ) {
@@ -29,6 +40,7 @@ public class FileRepository {
             throw new RuntimeException(e);
         }
     }
+
     public void mutualFriendsIDsToFile(List<GetMutualTargetUidsResponse> mutualFriends, String path) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
             bufferedWriter.write("Список общих друзей с друзьями\n");
@@ -43,11 +55,17 @@ public class FileRepository {
         }
     }
 
-    public void friendsToFile(List<Integer> ids, String path) {
+    public void friendsToFile(GetResponse user, List<UserFull> friends, String path) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
-            for (Integer id : ids
+            bufferedWriter.write("ID: " + user.getId() + "\n"
+                    + "ScreenName: " + user.getScreenName() + "\n"
+                    + "Имя Фамилия: " + user.getFirstName() + " " + user.getLastName() + "\n\n");
+            bufferedWriter.write("Друзья:\n");
+            for (UserFull friend : friends
             ) {
-                bufferedWriter.write(id.toString() + "\n");
+                bufferedWriter.write("ID: " + friend.getId() + "\n"
+                        + "ScreenName: " + friend.getScreenName() + "\n"
+                        + "Имя Фамилия: " + friend.getFirstName() + " " + friend.getLastName() + "\n\n");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -77,6 +95,36 @@ public class FileRepository {
         }
     }
 
+    public void userToFile(GetResponse user, List<String> locations, List<WallpostFull> posts, String pathUser) {
+        try (Writer bufferedWriter = new BufferedWriter(new FileWriter(pathUser))) {
+            bufferedWriter.write("ID: " + user.getId() + "\n"
+                    + "ScreenName: " + user.getScreenName() + "\n"
+                    + "Имя Фамилия: " + user.getFirstName() + " " + user.getLastName() + "\n"
+                    + "День рождения: " + user.getBdate() + "\n"
+                    + "Страна: " + user.getCountry() + "\n"
+                    + "Город: " + user.getCity() + "\n"
+                    + "Пол: " + user.getSex() + "\n"
+                    + "Интересы: " + user.getInterests() + "\n"
+                    + "Книги: " + user.getBooks() + "\n"
+                    + "Статус: " + user.getStatus() + "\n\n");
+            if (locations != null) {
+                bufferedWriter.write("Посещаемые локации: \n");
+                for (String location : locations) {
+                    bufferedWriter.write(location + "\n");
+                }
+            }
+            bufferedWriter.write("\n");
+            if (posts != null) {
+                bufferedWriter.write("Записи: \n");
+                for (WallpostFull post : posts) {
+                    bufferedWriter.write(post.getText() + "\n");
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void usersToFile(List<UserFull> users, String pathUsers) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(pathUsers))) {
             for (UserFull us : users) {
@@ -97,7 +145,7 @@ public class FileRepository {
         }
     }
 
-    public void userToFile(GetResponse user, List<GetByIdObjectLegacyResponse> groups, List<URI> photos, String pathUser) {
+    /*public void userToFile(GetResponse user, List<GetByIdObjectLegacyResponse> groups, List<URI> photos, String pathUser) {
         try (Writer bufferedWriter = new BufferedWriter(new FileWriter(pathUser))) {
             bufferedWriter.write("ID: " + user.getId() + "\n"
                     + "ScreenName: " + user.getScreenName() + "\n"
@@ -119,6 +167,20 @@ public class FileRepository {
                         + "Статус группы: " + gr.getStatus() + "\n\n");
             }
 
+            bufferedWriter.write("Фотографии:\n");
+            for (URI uri : photos) {
+                bufferedWriter.write(uri + "\n\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }*/
+
+    public void photosToFile(GetResponse user, List<URI> photos, String path){
+        try (Writer bufferedWriter = new BufferedWriter(new FileWriter(path))) {
+            bufferedWriter.write("ID: " + user.getId() + "\n"
+                    + "ScreenName: " + user.getScreenName() + "\n"
+                    + "Имя Фамилия: " + user.getFirstName() + " " + user.getLastName() + "\n\n");
             bufferedWriter.write("Фотографии:\n");
             for (URI uri : photos) {
                 bufferedWriter.write(uri + "\n\n");

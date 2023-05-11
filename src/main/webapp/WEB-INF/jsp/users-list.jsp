@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>User Registration Application</title>
+<title>007</title>
 <link rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -25,7 +25,6 @@
 	<div class="container col-md-5">
 		<div class="card">
 			<div class="card-body">
-			    <form action="UploadDownloadFileServlet" method="post">
                     <caption>
                         <h2>
                              User Information
@@ -38,6 +37,7 @@
                               <tr>
                                 <th scope="col">Photo</th>
                                 <th scope="col">Information</th>
+                                <th scope="col"></th>
                               </tr>
                             </thead>
                             <tbody>
@@ -58,13 +58,14 @@
                                             <p>Интересы: ${user.interests}</p>
                                             <p>Статус: ${user.status}</p>
                                         </td>
+                                        <td>
+                                            <a href="<%=request.getContextPath()%>/user-info?id=${user.id}" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Full Information</a>
+                                        </td>
                                     </tr>
                                 </c:forEach>
 
                             </tbody>
                           </table>
-
-                       <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
                     </c:if>
 				</form>
 			</div>

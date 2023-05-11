@@ -1,4 +1,4 @@
-package logic;
+package logic.repo;
 
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
@@ -28,14 +28,14 @@ import java.util.stream.Stream;
 
 import static data.DataForConnection.*;
 
-public class ApiService {
+public class ApiRepo {
     public static final int MAX_COUNT = 100;
     TransportClient transportClient;
     VkApiClient vk;
     UserActor actor;
     ServiceActor serviceActor;
 
-    public ApiService() {
+    public ApiRepo() {
         transportClient = new HttpTransportClient();
         vk = new VkApiClient(transportClient);
         actor = new UserActor(USER_ID, TOKEN);

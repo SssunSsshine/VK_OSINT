@@ -5,22 +5,20 @@ import com.vk.api.sdk.objects.groups.responses.GetByIdObjectLegacyResponse;
 import com.vk.api.sdk.objects.photos.Photo;
 import com.vk.api.sdk.objects.users.Fields;
 import com.vk.api.sdk.objects.users.UserFull;
-import com.vk.api.sdk.objects.users.UserMin;
 import com.vk.api.sdk.objects.users.responses.GetResponse;
 import com.vk.api.sdk.objects.wall.WallpostFull;
 import data.Coordinate;
-import logic.ApiService;
-import logic.FileRepository;
-import logic.GraphService;
-import logic.LocationService;
+import logic.repo.ApiRepo;
+import logic.repo.FileRepository;
+import logic.service.GraphService;
+import logic.service.LocationService;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static data.DataForConnection.FIELDS;
+import static data.DataForConnection.USER_FIELDS;
 import static data.DataForConnection.USER_ID;
 
 public class Main {
@@ -31,7 +29,7 @@ public class Main {
 
     public static void main(String[] args) throws ClientException, ApiException, InterruptedException, IOException {
 
-        ApiService apiService = new ApiService();
+        ApiRepo apiService = new ApiRepo();
         FileRepository fileRepository = new FileRepository();
         LocationService locationService = new LocationService();
         GraphService graphService = new GraphService();
@@ -48,7 +46,7 @@ public class Main {
         List<Photo> photosByCoordinates = apiService.getPhotosByCoordinates(51, 39, 40000);
         Integer id = photosByCoordinates.get(10).getOwnerId();
 
-        List<UserFull> users = apiService.getUsersByUserName("Ирина Воронина", FIELDS,10);
+        List<UserFull> users = apiService.getUsersByUserName("Ирина Воронина", USER_FIELDS,10);
         String photo = String.valueOf(users.get(0).getPhoto100());
         graphService.createExampleGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()));
         graphService.graphToImage();
@@ -56,12 +54,12 @@ public class Main {
         /*graphService.createFriendsGraph(apiService.getUserByUserID(USER_ID.toString(), new ArrayList<>()).get(0));
         Map<Integer, List<UserFull>> contactMatrix = graphService.getGraphFriends();*/
 
-        fileRepository.mutualGroupsWithFriendsToFile(apiService.getMutualGroupsByUserID(KRAMARENKO_ID), "mutualGroups.txt");
+        //fileRepository.mutualGroupsWithFriendsToFile(apiService.getMutualGroupsByUserID(KRAMARENKO_ID), "mutualGroups.txt");
 
         fileRepository.mutualFriendsIDsToFile(apiService.getMutualFriendsByUserID(KRAMARENKO_ID), "mutualFriends.txt");
 
-        fileRepository.friendsToFile(apiService.getFriendsByUserID(KRAMARENKO_ID).stream()
-                .map(UserMin::getId).collect(Collectors.toList()), "friends.txt");
+        /*fileRepository.friendsToFile(apiService.getFriendsByUserID(KRAMARENKO_ID).stream()
+                .map(UserMin::getId).collect(Collectors.toList()), "friends.txt");*/
 
         //извлечение текста из записей пользователя
         List<WallpostFull> posts = apiService.getNotesByUserID(EXAMPLE_ID);
@@ -89,6 +87,6 @@ public class Main {
 
         fileRepository.usersToFile(users, pathUsers);
 
-        fileRepository.userToFile(user, groups, photosURI, pathUser);
+       // fileRepository.userToFile(user, groups, photosURI, pathUser);
     }
 }

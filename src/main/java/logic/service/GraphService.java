@@ -1,4 +1,4 @@
-package logic;
+package logic.service;
 
 import com.mxgraph.layout.*;
 import com.mxgraph.util.mxCellRenderer;
@@ -7,6 +7,7 @@ import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import logic.repo.ApiRepo;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,19 +23,19 @@ public class GraphService {
     public static final int MIN_LEVEL = 0;
 
     //private final Map<Integer, List<UserFull>> graphFriends;
-    private final ApiService apiService;
+    private final ApiRepo apiService;
     private static Integer level = MIN_LEVEL;
     private static Graph<UserFull, DefaultEdge> g;
 
     public GraphService() {
         //this.graphFriends = new HashMap<>();
-        apiService = new ApiService();
+        apiService = new ApiRepo();
         g = new DefaultDirectedGraph<>(DefaultEdge.class);
     }
 
     public GraphService(Integer maxLvl) {
         //this.graphFriends = new HashMap<>();
-        apiService = new ApiService();
+        apiService = new ApiRepo();
         g = new DefaultDirectedGraph<>(DefaultEdge.class);
         MAX_LEVEL = maxLvl;
     }

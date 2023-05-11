@@ -1,4 +1,4 @@
-package logic;
+package logic.service;
 
 import com.byteowls.jopencage.JOpenCageGeocoder;
 import com.byteowls.jopencage.model.JOpenCageResponse;
