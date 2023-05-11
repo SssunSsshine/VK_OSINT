@@ -24,10 +24,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                   <ul class="navbar-nav">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Groups</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Группы</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Friends</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Друзья</a>
                     </li>
                   </ul>
                 </div>
@@ -41,7 +41,7 @@
 			    <form action="download-photos" method="post">
                     <caption>
                         <h2>
-                             Photos
+                             Фотографии
                         </h2>
                     </caption>
 
@@ -49,24 +49,24 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm text-center" >
-                                        <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Загрузить</button>
                                 </div>
                             </div>
                         </div>
                         <fieldset class="form-group">
-                            <label>User ID</label> <input type="text"
+                            <label>ID</label> <input type="text"
                                 value="<c:out value='${user.getId()}' />" class="form-control"
                                 name="id" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Surname</label> <input type="text"
+                            <label>Фамилия</label> <input type="text"
                                 value="<c:out value='${user.getLastName()}' />" class="form-control"
                                 name="surname" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Name</label> <input type="text"
+                            <label>Имя</label> <input type="text"
                                 value="<c:out value='${user.getFirstName()}' />" class="form-control"
                                 name="name" required="required" readonly>
                         </fieldset>

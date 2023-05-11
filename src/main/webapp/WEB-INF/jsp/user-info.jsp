@@ -24,13 +24,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                   <ul class="navbar-nav">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Photos</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Фотографии</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Groups</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Группы</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Friends</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Друзья</a>
                     </li>
                   </ul>
                 </div>
@@ -44,37 +44,37 @@
 			    <form action="download-user" method="post">
                     <caption>
                         <h2>
-                             User Information
+                             Информация о пользователе
                         </h2>
                     </caption>
 
                     <c:if test="${user != null}">
                         <div class="container">
                            <div class="col-sm text-center" >
-                                 <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
+                                 <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Загрузить</button>
                            </div>
                         </div>
                         <fieldset class="form-group">
-                            <label>User ID</label> <input type="text"
+                            <label>ID</label> <input type="text"
                                 value="<c:out value='${user.getId()}' />" class="form-control"
                                 name="id" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Surname</label> <input type="text"
+                            <label>Фамилия</label> <input type="text"
                                 value="<c:out value='${user.getLastName()}' />" class="form-control"
                                 name="surname" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Name</label> <input type="text"
+                            <label>Имя</label> <input type="text"
                                 value="<c:out value='${user.getFirstName()}' />" class="form-control"
                                 name="name" required="required" readonly>
                         </fieldset>
 
                         <c:if test="${user.getBdate() != null}">
                             <fieldset class="form-group">
-                                <label>User Birthday</label> <input type="text"
+                                <label>Дата рождения</label> <input type="text"
                                     value="<c:out value='${user.getBdate()}' />" class="form-control"
                                     name="birthday" required="required" readonly>
                             </fieldset>
@@ -82,7 +82,7 @@
 
                         <c:if test="${user.getCountry() != null}">
                             <fieldset class="form-group">
-                                <label>User Country</label> <input type="text"
+                                <label>Страна</label> <input type="text"
                                     value="<c:out value='${user.getCountry().getTitle()}' />" class="form-control"
                                     name="country" required="required" readonly>
                             </fieldset>
@@ -90,7 +90,7 @@
 
                         <c:if test="${user.getCity() != null}">
                             <fieldset class="form-group">
-                                <label>User City</label> <input type="text"
+                                <label>Город</label> <input type="text"
                                     value="<c:out value='${user.getCity().getTitle()}' />" class="form-control"
                                     name="city" required="required" readonly>
                             </fieldset>
@@ -98,13 +98,13 @@
 
                         <c:if test="${user.getSex() != null}">
                             <fieldset class="form-group">
-                                <label>User Sex</label>
+                                <label>Пол</label>
                                 <input type="text"
                                     <c:if test="${user.getSex().toString() == '1'}">
-                                        value="<c:out value='Female' />"
+                                        value="<c:out value='Женский' />"
                                     </c:if>
                                     <c:if test="${user.getSex().toString() != '1'}">
-                                        value="<c:out value='Male' />"
+                                        value="<c:out value='Мужской' />"
                                     </c:if>
                                     class="form-control"
                                     name="sex" required="required" readonly>
@@ -113,7 +113,7 @@
 
                         <c:if test="${user.getStatus() != null && !user.getStatus().isBlank()}">
                             <fieldset class="form-group">
-                                <label>User Status</label> <input type="text"
+                                <label>Статус</label> <input type="text"
                                     value="<c:out value='${user.getStatus()}' />" class="form-control"
                                     name="status" required="required" readonly>
                             </fieldset>
@@ -121,7 +121,7 @@
 
                         <c:if test="${user.getBooks() != null && !user.getBooks().isBlank()}">
                             <fieldset class="form-group">
-                                <label>User Books</label> <input type="text"
+                                <label>Книги</label> <input type="text"
                                     value="<c:out value='${user.getBooks()}' />" class="form-control"
                                     name="books" required="required" readonly>
                             </fieldset>
@@ -129,14 +129,14 @@
 
                         <c:if test="${user.getInterests() != null && !user.getInterests().isBlank()}">
                             <fieldset class="form-group">
-                                <label>User Interests</label> <input type="text"
+                                <label>Интересы</label> <input type="text"
                                     value="<c:out value='${user.getInterests()}' />" class="form-control"
                                     name="interests" required="required" readonly>
                             </fieldset>
                         </c:if>
 
                         <c:if test="${locations != null}">
-                        <label>User Locations</label>
+                        <h2>Локации</h2>
                             <c:forEach  var="location" items="${locations}">
                                 <p>
                                     ${location}
@@ -145,7 +145,7 @@
                         </c:if>
 
                         <c:if test="${notes != null}">
-                        <label>User Notes</label>
+                        <h2>Записи</h2>
                             <c:forEach  var="note" items="${notes}">
                                 <p>
                                     ${note.getText()}

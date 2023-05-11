@@ -15,6 +15,7 @@ import logic.service.ApiService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/user-info")
 public class UserInfoServlet extends HttpServlet {
@@ -38,7 +39,7 @@ public class UserInfoServlet extends HttpServlet {
 
     private void showUserInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-
+        session.invalidate();
         String id = req.getParameter("id");
 
         GetResponse user = apiService.getUser(id);
@@ -56,8 +57,11 @@ public class UserInfoServlet extends HttpServlet {
         req.setAttribute("user", user);
 
         if (notes != null) {
-            session.setAttribute("notes", notes);
-            req.setAttribute("notes", notes);
+            notes = notes.stream().filter(note -> !note.getText().isBlank()).collect(Collectors.toList());
+            if (notes.size() != 0) {
+                session.setAttribute("notes", notes);
+                req.setAttribute("notes", notes);
+            }
         }
         if (locations != null) {
             session.setAttribute("location", locations);

@@ -24,10 +24,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                   <ul class="navbar-nav">
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Photos</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Фотографии</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Groups</a>
+                      <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/groups">Группы</a>
                     </li>
                   </ul>
                 </div>
@@ -41,37 +41,44 @@
 			    <form action="download-friends" method="post">
                     <caption>
                         <h2>
-                             Friends
+                             Друзья
                         </h2>
                     </caption>
 
                     <c:if test="${user != null}">
+                        <div class="container">
+                           <div class="row">
+                               <div class="col-sm text-center" >
+                                     <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Загрузить</button>
+                               </div>
+                           </div>
+                        </div>
                         <fieldset class="form-group">
-                            <label>User ID</label> <input type="text"
+                            <label>ID пользователя</label> <input type="text"
                                 value="<c:out value='${user.getId()}' />" class="form-control"
                                 name="id" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Surname</label> <input type="text"
+                            <label>Фамилия</label> <input type="text"
                                 value="<c:out value='${user.getLastName()}' />" class="form-control"
                                 name="surname" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Name</label> <input type="text"
+                            <label>Имя</label> <input type="text"
                                 value="<c:out value='${user.getFirstName()}' />" class="form-control"
                                 name="name" required="required" readonly>
                         </fieldset>
 
                         <c:if test="${friends != null}">
-                            <label>User Friends</label>
+                            <label>Друзья</label>
                             <table class="table">
                                 <thead>
                                   <tr>
-                                    <th scope="col">Photo</th>
+                                    <th scope="col">Фото</th>
                                     <th scope="col">ID</th>
-                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Имя</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -92,14 +99,6 @@
                                 </tbody>
                                 </table>
                         </c:if>
-
-                        <div class="container">
-                           <div class="row">
-                               <div class="col-sm text-center" >
-                                     <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
-                               </div>
-                           </div>
-                        </div>
                     </c:if>
 				</form>
 			</div>

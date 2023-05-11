@@ -30,15 +30,15 @@
 					<div class="container">
 						<div class="row fs">
 							<div class="col-sm text-center">
-								Choose how do you want to search information about people
+							    Как вы хотите искать информацию о людях?
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-sm text-center" >
-								<a href="<%=request.getContextPath()%>/search?action=search_by_fullname" class="btn btn-primary btn-lg btn-block" role="button">By User Full Name</a>
+								<a href="<%=request.getContextPath()%>/search?action=search_by_fullname" class="btn btn-primary btn-lg btn-block" role="button">По имени</a>
 							</div>
 							<div class="col-sm text-center">
-								<a href="<%=request.getContextPath()%>/search?action=search_by_id" class="btn btn-primary btn-lg btn-block" role="button">By User ID</a>
+								<a href="<%=request.getContextPath()%>/search?action=search_by_id" class="btn btn-primary btn-lg btn-block" role="button">По ID</a>
 							</div>
 						</div>
 					</div>

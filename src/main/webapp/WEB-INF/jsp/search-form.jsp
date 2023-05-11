@@ -37,24 +37,24 @@
                         <caption>
                             <h2 class="fs-search fs-header">
                                 <c:if test="${is_id}">
-                                    Search User By ID
+                                    Поиск пользователя по ID
                                 </c:if>
                                 <c:if test="${is_fullname}">
-                                    Search User By Full Name
+                                    Поиск пользователя по имени
                                 </c:if>
                             </h2>
                         </caption>
 
                         <c:if test="${is_id}">
                             <fieldset class="form-group">
-                                <label class = "fs-search">User ID</label> <input type="text"
+                                <label class = "fs-search">ID пользователя</label> <input type="text"
                                     class="form-control" name="id" required="required">
                             </fieldset>
                         </c:if>
 
                         <c:if test="${is_fullname}">
                             <fieldset class="form-group">
-                                <label class = "fs-search">User Full Name</label> <input type="text"
+                                <label class = "fs-search">Имя пользователя</label> <input type="text"
                                     class="form-control" name="fullname" required="required">
                             </fieldset>
                         </c:if>
@@ -64,7 +64,7 @@
                         </c:if>
 
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary">Найти</button>
                         </div>
                         </form>
                     </div>

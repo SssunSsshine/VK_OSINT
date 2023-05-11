@@ -24,10 +24,10 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                       <ul class="navbar-nav">
                         <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Photos</a>
+                          <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/photos">Фотографии</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Friends</a>
+                          <a class="nav-link active" aria-current="page" href="<%=request.getContextPath()%>/friends">Друзья</a>
                         </li>
                       </ul>
                     </div>
@@ -35,13 +35,13 @@
             </nav>
     </header>
 
-	<div class="container col-md-5">
+	<div class="container col-md-7">
 		<div class="card" style = "width: 800px;">
 			<div class="card-body">
 			    <form action="download-groups" method="post">
                     <caption>
                         <h2>
-                             Groups
+                             Группы
                         </h2>
                     </caption>
 
@@ -49,36 +49,36 @@
                         <div class="container">
                            <div class="row">
                                <div class="col-sm text-center" >
-                                     <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Download</button>
+                                     <button type="submit" class="btn btn-primary btn-lg btn-block fs-btn">Загрузить</button>
                                </div>
                            </div>
                         </div>
                         <fieldset class="form-group">
-                            <label>User ID</label> <input type="text"
+                            <label>ID пользователя</label> <input type="text"
                                 value="<c:out value='${user.getId()}' />" class="form-control"
                                 name="id" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Surname</label> <input type="text"
+                            <label>Фамилия</label> <input type="text"
                                 value="<c:out value='${user.getLastName()}' />" class="form-control"
                                 name="surname" required="required" readonly>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>User Name</label> <input type="text"
+                            <label>Имя</label> <input type="text"
                                 value="<c:out value='${user.getFirstName()}' />" class="form-control"
                                 name="name" required="required" readonly>
                         </fieldset>
 
                         <c:if test="${groups != null}">
-                            <h2>User Groups</h2>
+                            <h2>Группы</h2>
                             <table class="table">
                                 <thead>
                                     <th scope="col" style="width: 4%;">ID</th>
-                                    <th scope="col" style="width: 7%;">Name</th>
-                                    <th scope="col" style="width: 7%;">Status</th>
-                                    <th scope="col" style="width: 14%;">Description</th>
+                                    <th scope="col" style="width: 7%;">Название</th>
+                                    <th scope="col" style="width: 7%;">Статус</th>
+                                    <th scope="col" style="width: 14%;">Описание</th>
                                 </thead>
                                 <tbody>
 
@@ -103,12 +103,12 @@
                         </c:if>
 
                         <c:if test="${mutualGroups != null}">
-                            <h2>Mutual Groups</h2>
+                            <h2>Общие Группы</h2>
                             <table class="table">
                                 <thead>
                                   <tr>
-                                    <th scope="col">Group Info</th>
-                                    <th scope="col">Friends Ids</th>
+                                    <th scope="col">Информация о группе</th>
+                                    <th scope="col">ID друзей</th>
                                   </tr>
                                 </thead>
                                 <tbody>

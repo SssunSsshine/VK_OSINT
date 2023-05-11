@@ -27,7 +27,7 @@
 			<div class="card-body">
                     <caption>
                         <h2>
-                             User Information
+                             Информация о пользователях
                         </h2>
                     </caption>
 
@@ -35,8 +35,8 @@
                         <table class="table">
                             <thead>
                               <tr>
-                                <th scope="col">Photo</th>
-                                <th scope="col">Information</th>
+                                <th scope="col">Фото</th>
+                                <th scope="col">Информация</th>
                                 <th scope="col"></th>
                               </tr>
                             </thead>
@@ -59,7 +59,7 @@
                                             <p>Статус: ${user.status}</p>
                                         </td>
                                         <td>
-                                            <a href="<%=request.getContextPath()%>/user-info?id=${user.id}" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Show Full Information</a>
+                                            <a href="<%=request.getContextPath()%>/user-info?id=${user.id}" class="btn btn-primary btn-lg btn-block fs-btn" role="button">Больше информации</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
